@@ -24,11 +24,39 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve s
 const upload = multer({ dest: 'uploads/' }); // Configure Multer to save files to uploads/
 
 // MongoDB connection
-mongoose.connect(process.env.MDB_KEY, { // Connect to MongoDB
+/*mongoose.connect(process.env.MDB_KEY, { // Connect to MongoDB
   useNewUrlParser: true, // Use new URL parser
   useUnifiedTopology: true // Use new topology engine
 }).then(() => console.log('MongoDB connected')) // Log success
-  .catch(err => console.error('MongoDB connection error:', err)); // Log error
+  .catch(err => console.error('MongoDB connection error:', err)); // Log error*/
+
+
+let isConnected =false;
+
+async function connectToMongoDB() {
+  try {
+    await mongoose.connect(process.env.MDB_KEY, { // Connect to MongoDB
+          useNewUrlParser: true, // Use new URL parser
+          useUnifiedTopology: true // Use new topology engine
+    })
+    isConnected=true;
+    console.log("MongoDB connected")
+  
+    
+  } catch (error) {
+     console.error('MongoDB connection error:', error);
+    
+  }
+  
+}
+
+
+app.use((req,res,next) => {
+  if (!isConnected){
+    connectToMongoDB()
+  }
+  next()
+})
 
 // User Schema
 const userSchema = new mongoose.Schema({ // Define schema for users
@@ -164,4 +192,6 @@ app.get('/influencerprofile', async (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`Server running on port ${port}`)); // Start server
+//app.listen(port, () => console.log(`Server running on port ${port}`)); // Start server
+
+export default app
