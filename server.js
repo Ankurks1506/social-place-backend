@@ -18,7 +18,7 @@ const port = process.env.PORT || 5000; // Define server port
 const JWT_SECRET = process.env.JWT_SECRET; // JWT secret (replace with env variable in production)
 
 // Middleware
-app.use(cors()); // Enable CORS for frontend requests
+app.use(cors({ origin:'https://social-place.vercel.app'})); // Enable CORS for frontend requests
 app.use(express.json()); // Parse JSON bodies
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve static files from uploads/
 const upload = multer({ dest: 'uploads/' }); // Configure Multer to save files to uploads/
