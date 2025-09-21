@@ -192,6 +192,10 @@ app.get('/influencerprofile', async (req, res) => {
   }
 });
 
+app.get('/x', async (req, res) => {
+  res.send(isConnected)
+});
+
 //app.listen(port, () => console.log(`Server running on port ${port}`)); // Start server
 
 export default app
